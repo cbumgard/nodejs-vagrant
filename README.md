@@ -2,67 +2,60 @@
 
 Provisions a clean Ubuntu 12.04 32-bit server instance with all needed Node.js development tools (Node.js, git, vim); services (MongoDB, Redis, GitHub, Heroku, Travis-CI).
 
-## Setup
+## Install Vagrant & VirtualBox
 
-### Install vagrant: 
+### Install Vagrant 1.5:
 [http://vagrantup.com](http://vagrantup.com)
 
 ### Install VirtualBox:
 [https://www.virtualbox.org/wiki/Downloads](https://www.virtualbox.org/wiki/Downloads)
 
-### Install Git & GitHub SSH Keys:
+## Setup Option 1: Box
 
-Install Git: [http://git-scm.com/download/](http://git-scm.com/download/)
+```
+mkdir DIR && cd DIR
+vagrant init cbumgard/nodejs
+vagrant up
+vagrant ssh
+```
 
-Generate ssh keys: [https://help.github.com/articles/generating-ssh-keys](https://help.github.com/articles/generating-ssh-keys)
+Done!
 
-### Provision your box:
+For more see: [https://vagrantcloud.com/cbumgard/nodejs](https://vagrantcloud.com/cbumgard/nodejs)
 
-Clone this repository: ```git clone git@github.com:cbumgard/nodejs-vagrant.git```
+## Setup Option 2: Vagrantfile
 
-From within the ./nodejs-vagrant repo ```cd nodejs-vagrant```
-
-Run ```vagrant up``` to provision new box. __Note you do not need to use --no-provision argument as this box tracks when it has been fully provisioned and will not attempt to re-provision.__
-
-Then ```vagrant ssh``` to connect to box
+```
+git clone git@github.com:cbumgard/nodejs-vagrant.git
+cd nodejs-vagrant
+vagrant up
+vagrant ssh
+```
 
 Done! 
 
-__By default the ```vagrant``` user is configured with password 'vagrant'.__
+## Post-Setup
+
+### Vagrant user
+
+By default the ```vagrant``` user is configured with password 'vagrant'. The vagrant user is also configured for password-less sudo.
 
 ### Edit code on host machine, build in VM
 
 Your ```~/``` home directory on your host machine is synced to the ```/host/``` directory inside of Vagrant. So for example you can edit code in ```~/code/``` on your laptop and build it inside a Vagrant shell inside ```/host/code```.
 
-### CLI commands 
+### Networking:
 
-__Important__: Read the [available commands](http://docs.vagrantup.com/v2/cli/index.html) for vagrant. 
+Configured for private network on static IP: ```192.168.33.10```, with port ```:3000``` forwarded.
 
-### Configure networking:
+So from a web browser you have two ways of accessing a node.js process for example running on port 3000 on the VM:
 
-Configured for private network on static IP: ```192.168.33.10```
+* ```localhost:3000```
+* ```192.178.33.10:3000```
 
-Append to your /etc/hosts file for convenience:
+Additionally for convenience, append this line to your ```/etc/hosts``` file:
 
 ```192.168.33.10   vagrant.localhost```
-
-### Errors
-
-Included is a script ```./sh/repair-mac.sh``` that fixes the problem that occurs (usually after a forced reboot) where the following error shows up on 'vagrant up':
-
-```bash
-There was an error while executing `VBoxManage`, a CLI used by Vagrant
-for controlling VirtualBox. The command and stderr is shown below.
-
-Command: ["hostonlyif", "create"]
-
-Stderr: 0%...
-Progress state: NS_ERROR_FAILURE
-VBoxManage: error: Failed to create the host-only adapter
-VBoxManage: error: VBoxNetAdpCtl: Error while adding new interface: failed to open /dev/vboxnetctl: No such file or directory
-VBoxManage: error: Details: code NS_ERROR_FAILURE (0x80004005), component HostNetworkInterface, interface IHostNetworkInterface
-VBoxManage: error: Context: "int handleCreate(HandlerArg*, int, int*)" at line 66 of file VBoxManageHostonly.cpp
-```
 
 ## Services
 
@@ -92,3 +85,25 @@ heroku keys:add
 ```travis login```
 or
 ```travis login --pro```
+
+## Troubleshooting
+
+Included is a script ```./sh/repair-mac.sh``` that fixes the problem that occurs (usually after a forced reboot) where the following error shows up on 'vagrant up':
+
+```bash
+There was an error while executing `VBoxManage`, a CLI used by Vagrant
+for controlling VirtualBox. The command and stderr is shown below.
+
+Command: ["hostonlyif", "create"]
+
+Stderr: 0%...
+Progress state: NS_ERROR_FAILURE
+VBoxManage: error: Failed to create the host-only adapter
+VBoxManage: error: VBoxNetAdpCtl: Error while adding new interface: failed to open /dev/vboxnetctl: No such file or directory
+VBoxManage: error: Details: code NS_ERROR_FAILURE (0x80004005), component HostNetworkInterface, interface IHostNetworkInterface
+VBoxManage: error: Context: "int handleCreate(HandlerArg*, int, int*)" at line 66 of file VBoxManageHostonly.cpp
+```
+
+## License
+
+[MIT](https://github.com/cbumgard/nodejs-vagrant/blob/master/LICENSE)
