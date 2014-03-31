@@ -51,7 +51,7 @@ Configured for private network on static IP: ```192.168.33.10```, with port ```:
 So from a web browser you have two ways of accessing a node.js process for example running on port 3000 on the VM:
 
 * ```localhost:3000```
-* ```192.178.33.10:3000```
+* ```192.168.33.10:3000```
 
 Additionally for convenience, append this line to your ```/etc/hosts``` file:
 
